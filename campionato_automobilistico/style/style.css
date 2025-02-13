@@ -1,0 +1,31 @@
+body{background-color: #131313;}
+
+.navbar{
+    background-color: #a10e0e;
+}
+header {
+    background: url('../style/images/background.jpg') no-repeat center center;
+    background-size: cover;
+    color: white;
+}
+/* Aggiungi questo CSS nel tuo file styles.css o in uno stile inline */
+.carousel {
+    height: 750px; /* Imposta l'altezza desiderata */
+    overflow: hidden; /* Nasconde eventuali parti delle immagini che fuoriescono */
+}
+
+.carousel-item {
+    height: 100%; /* Riempi l'altezza del carosello */
+}
+
+.carousel-item img {
+    width: 100%; /* Riempi la larghezza del contenitore */
+    height: 100%; /* Riempi l'altezza del contenitore */
+    object-fit: cover; /* Mantiene il rapporto d'aspetto e copre l'intero spazio */
+}
+.bg-dark{
+    background-color: #131313;
+}
+footer{
+    color: white;
+}
