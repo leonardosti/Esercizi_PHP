@@ -1,0 +1,110 @@
+<?php
+include 'base/database_connection/db_functions.php';
+$database = require 'base/database_connection/database_connection.php';
+$attributi = [
+    'nome' => 'text',
+    'cognome' => 'text',
+    'indirizzo' => 'text',
+    'telefono' => 'tel',
+    'email' => 'email',
+    'password' => 'password',
+];
+
+if($_SERVER['REQUEST_METHOD'] === 'POST'){
+    $dati = [];
+    foreach (array_keys($attributi) as $key) {
+        $dati[$key] = isset($_POST[$key]) ? trim($_POST[$key]) : '';
+    }
+
+    // controllo campi vuoti
+    foreach ($dati as $key => $valore) {
+        if ($valore === '') {
+            echo "<script>alert('Completare tutti i campi della registrazione');</script>";
+            exit;
+        }
+    }
+
+    $dati['nome'] = ucfirst($dati['nome']);
+    $dati['cognome'] = ucfirst($dati['cognome']);
+
+    // controllo password
+    $patternPassword = '/^(?=.*[a-z])    # almeno una minuscola
+                         (?=.*[A-Z])     # almeno una maiuscola
+                         (?=.*\d)        # almeno un numero
+                         (?=.*\W)        # almeno un carattere speciale
+                         .{8,}           # minimo 8 caratteri
+                         $/x';
+
+    if (!preg_match($patternPassword, $dati['password'])) {
+        echo "<script>
+                alert('Password non valida. Deve contenere minimo 8 caratteri, '
+                    + 'una maiuscola, una minuscola, un numero e un carattere speciale.');
+                window.history.back();
+              </script>";
+        exit;
+    }
+
+    $dati['password'] = password_hash($dati['password'], PASSWORD_DEFAULT);
+
+    try{
+        $query = "INSERT INTO fastroute.clienti (nome, cognome, indirizzo, telefono, email, password) VALUES 
+                (:nome, :cognome, :indirizzo, :telefono, :email, :password)";
+        $stmt = $database->prepare($query);
+        foreach($dati as $attributo => $valore){
+            $stmt->bindValue(':' . $attributo, $valore);
+        }
+        $stmt->execute();
+        echo "<script>
+            alert('Registrazione avvenuta con successo');
+            window.location.href = 'login.php';
+          </script>";
+    }catch(PDOException $e){
+        // error message
+        echo "<script>alert('" . addslashes($e->getMessage()) . "');</script>";
+    }
+}
+
+?>
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FastRoute - Corriere Espresso</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="style/style.css" rel="stylesheet">
+</head>
+<body class="d-flex flex-column min-vh-100">
+<?php include 'base/header.php'?>
+<!-- Form Registrazione -->
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-5 col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <div class="text-center mb-4">
+                        <h2 class="fw-bold text-primary">Registrati a FastRoute</h2>
+                        <p class="text-muted">Inserisci le tue informazioni per registrarti al sistema</p>
+                    </div>
+                    <form method="POST" action="">
+                        <?= form($attributi);?>
+                        <button type="submit" class="btn btn-primary w-100 py-2">
+                            <i class="fas fa-sign-in-alt me-2"></i>Registrati
+                        </button>
+                    </form>
+
+                    <div class="text-center mt-4">
+                        <p class="mb-0">Hai gia' un account? <a href="login.php" class="text-primary">Accedi</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php include 'base/footer.php'?>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+<script src="script/script.js"></script>
+</body>
+</html>

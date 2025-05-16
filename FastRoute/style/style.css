@@ -1,0 +1,112 @@
+/* Root Variables for Theming */
+:root {
+    --fr-primary: #2c3e50;
+    --fr-secondary: #34495e;
+    --fr-accent: #3498db;
+    --fr-light: #ecf0f1;
+    --fr-dark: #2c3e50;
+    --fr-text-color: #333;
+}
+
+/* Global Styles */
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    color: var(--fr-text-color);
+    line-height: 1.6;
+}
+
+/* Navbar Enhancements */
+.navbar {
+    transition: all 0.3s ease;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+}
+
+.navbar .logo {
+    max-height: 40px;
+    transition: transform 0.2s;
+}
+
+.navbar .logo:hover {
+    transform: scale(1.05);
+}
+
+.brand-text {
+    font-size: 1.25rem;
+    letter-spacing: -0.5px;
+}
+
+.nav-link {
+    position: relative;
+    color: var(--fr-secondary);
+    transition: color 0.3s ease;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 50%;
+    background-color: var(--fr-accent);
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover::after {
+    width: 100%;
+    left: 0;
+}
+
+.nav-item.dropdown > .nav-link::after {
+    display: none;
+}
+
+/* Footer Styling */
+.footer {
+    background-color: #a5a5a5;
+    border-top: 1px solid rgba(0,0,0,0.05);
+}
+
+.footer a {
+    color: var(--fr-secondary);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer a:hover {
+    color: var(--fr-accent);
+}
+
+.social-links a {
+    font-size: 1.25rem;
+    transition: color 0.3s ease;
+}
+
+.social-links a:hover {
+    color: var(--fr-accent) !important;
+}
+
+/* Theme Toggle */
+.theme-toggle .btn {
+    border: none;
+    background: transparent;
+    color: var(--fr-secondary);
+}
+
+.theme-toggle .btn:hover {
+    color: var(--fr-accent);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .nav-actions {
+        flex-direction: column;
+        align-items: stretch !important;
+    }
+
+    .nav-actions .btn {
+        margin-bottom: 0.5rem;
+        width: 100%;
+    }
+}
